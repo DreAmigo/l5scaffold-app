@@ -1,0 +1,30 @@
+@extends('layouts.app')
+
+@section('header')
+@endsection
+
+@section('content')
+
+  <div class="page-header">
+    <h1 class="page-title">{{Class}}</h1>
+    <ol class="breadcrumb">
+      <li><a href="{{ route('{{class}}.index') }}">{{Class}}</a></li>
+      <li>Add</li>
+    </ol>
+  </div>
+
+  <div class="page-content">
+    @include('error')
+    <div class="panel">
+      <div class="panel-body container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <form action="{{ route('{{class}}.store') }}" method="POST">
+                    @include('{{class}}/_form', ['submitButton' => 'Save', 'action' => 'add'])
+                </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+@endsection

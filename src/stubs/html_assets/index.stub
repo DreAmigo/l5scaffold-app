@@ -1,0 +1,83 @@
+@extends('layouts.app')
+
+@section('header')
+@endsection
+
+@section('content')
+
+  <div class="page-header">
+    <h1 class="page-title">{{Class}}</h1>
+    <ol class="breadcrumb">
+      <li><a href="{{ route('{{class}}.index') }}">{{Class}}</a></li>
+      <li><a href="{{ route('{{class}}.create') }}">New {{classSingle}}</a></li>
+    </ol>
+  </div>
+
+  <div class="page-content">
+
+    @if (Session::has('message'))
+      <div class="alert dark alert-success alert-dismissible">
+        <p>{{ Session::get('message') }}</p>
+      </div>
+    @endif
+
+    <div class="panel">
+      <div class="panel-body container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+              <form action="">
+                <div class="input-search input-search-dark">
+                  <i class="input-search-icon wb-search" aria-hidden="true"></i>
+                  <input type="search" class="form-control" name="search" placeholder="Search..." value="{{ app('request')->input('search') }}">
+                </div>
+              </form>
+          </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+              @if(${{class}}->count())
+                  <div class="table-responsive">
+                  <table class="table">
+                      <thead>
+                          <tr>
+                              {{header_fields}}
+                              <th class="text-right"></th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          @foreach(${{class}} as ${{classSingle}})
+                              <tr>
+                                  {{content_fields}}
+                                  <td class="text-right">
+                                      <a style="text-decoration: none;" class="btn btn-default btn-sm" href="{{ route('{{class}}.edit', ${{classSingle}}->hash) }}"><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                                  </td>
+                              </tr>
+                          @endforeach
+                      </tbody>
+                  </table>
+                  </div>
+                  {!! ${{class}}->render() !!}
+              @else
+                  <p>No {{Class}} found!</p>
+              @endif
+
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add new record -->
+  <div class="site-action">
+  <form>
+    <button formaction="{{ route('{{class}}.create') }}" class="site-action-toggle tooltip-primary btn-raised btn btn-primary btn-floating" data-toggle="tooltip" data-placement="top" data-original-title="Add {{classSingle}}">
+      <i class="front-icon wb-plus animation-scale-up" aria-hidden="true"></i>
+      <i class="back-icon wb-close animation-scale-up" aria-hidden="true"></i>
+    </button>
+  </form>
+  </div>
+  <!-- Add new record -->
+
+
+@endsection

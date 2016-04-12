@@ -1,0 +1,122 @@
+<?php
+namespace App\Http\Controllers;
+
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+
+use {{model_path}};
+use Illuminate\Http\Request;
+use Auth;
+
+class {{class}} extends Controller {
+
+	/**
+	 * [__construct All users must be authenticated.]
+	 */
+	public function __construct()
+	{
+	    $this->middleware('auth');
+	}
+
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return Response
+	 */
+	public function index(Request $request)
+	{
+		if($request->input('search')){
+			${{model_name_var}} = {{model_name_class}}::orderBy('name', 'asc')
+								->where("account_id" , Auth::user()->account_id)
+								->where('name', 'like', '%'. $request->input('search') . "%")
+								->paginate(20);
+		}
+		else {
+			${{model_name_var}} = {{model_name_class}}::orderBy('name', 'asc')
+							->where("account_id", Auth::user()->account_id)
+							->paginate(20);
+		}
+
+		return view('{{model_name_var}}.index', compact('{{model_name_var}}'));
+	}
+
+	/**
+	 * Show the form for creating a new resource.
+	 *
+	 * @return Response
+	 */
+	public function create()
+	{
+		return view('{{model_name_var}}.create');
+	}
+
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param Request $request
+	 * @return Response
+	 */
+	public function store(Request $request)
+	{
+	    $this->validate($request, [
+	        'name' => 'required',
+	    ]);
+
+		$data = $request->input();
+		$data['hash'] =  sha1(uniqid(uniqid() . time() . mt_rand(), true));
+		$data['account_id'] = Auth::user()->account_id;
+		{{model_name_class}}::create($data);
+		return redirect()->route('{{model_name_var}}.index')->with('message', '{{model_name_class}} created successfully.');
+	}
+
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  var  $hash - Internal generated hashid.
+	 * @return Response
+	 */
+	public function edit($hash)
+	{
+		${{model_name_var_sgl}}  = {{model_name_class}}::where('hash', $hash)
+									->where("account_id" , Auth::user()->account_id)
+									->firstOrFail();
+		return view('{{model_name_var}}.edit', compact('{{model_name_var_sgl}}'));
+	}
+
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  var  $hash - Internal generated hashid.
+	 * @param Request $request
+	 * @return Response
+	 */
+	public function update(Request $request, $hash)
+	{
+	    $this->validate($request, [
+	        'name' => 'required',
+	    ]);
+
+		${{model_name_var_sgl}}  = {{model_name_class}}::where('hash', $hash)
+									->where("account_id" , Auth::user()->account_id)
+									->firstOrFail();
+		$data = $request->input();
+		${{model_name_var_sgl}}->fill($request->input())->save();
+		return redirect()->route('{{model_name_var}}.index')->with('message', '{{model_name_class}} updated successfully.');
+	}
+
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function destroy($hash)
+	{
+		${{model_name_var_sgl}}  = {{model_name_class}}::where('hash', $hash)
+									->where("account_id" , Auth::user()->account_id)
+									->firstOrFail();
+		${{model_name_var_sgl}}->delete();
+		return redirect()->route('{{model_name_var}}.index')->with('message', '{{model_name_class}} deleted successfully.');
+	}
+
+}

@@ -1,0 +1,6 @@
+{{content_fields}}
+
+<div>
+	<button type="submit" class="btn btn-primary">{{ $submitButton }}</button>
+	<a class="btn btn-default" href="{{ route('{{class}}.index') }}"><i class="glyphicon glyphicon-backward"></i> Back</a>
+</div>

@@ -1,0 +1,72 @@
+@extends('layouts.app')
+
+@section('header')
+    <div class="page-header">
+        <h1><i class="glyphicon glyphicon-edit"></i> {{Class}} / Edit #{{${{classSingle}}->id}}</h1>
+    </div>
+@endsection
+
+@section('content')
+
+  <div class="page-header">
+    <h1 class="page-title">{{Class}}</h1>
+    <ol class="breadcrumb">
+      <li><a href="{{ route('{{class}}.index') }}">{{Class}}</a></li>
+      <li>{{ ${{classSingle}}->name }}</li>
+    </ol>
+  </div>
+
+  <div class="page-content">
+    @include('error')
+    <div class="panel">
+      <div class="panel-body container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <form action="{{ route('{{class}}.update', ${{classSingle}}->hash) }}" method="POST">
+                    <input type="hidden" name="_method" value="PUT">
+                    @include('{{class}}/_form', ['submitButton' => 'Update', 'action' => 'edit'])
+                </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add new record -->
+  <div class="site-action">
+  <form>
+    <button formaction="{{ route('{{class}}.create') }}" class="site-action-toggle tooltip-primary btn-raised btn btn-primary btn-floating" data-toggle="tooltip" data-placement="top" data-original-title="Add {{classSingle}}">
+      <i class="front-icon wb-plus animation-scale-up" aria-hidden="true"></i>
+      <i class="back-icon wb-close animation-scale-up" aria-hidden="true"></i>
+    </button>
+  </form>
+  </div>
+  <!-- Add new record -->
+
+  <!-- Modal Delete -->
+  <form class="form-delete" action="{{ route('{{class}}.destroy', ${{classSingle}}->hash) }}" method="POST">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+    <div class="modal fade modal-danger" id="modalDelete{{classSingle}}" aria-hidden="true" aria-labelledby="modalDelete{{classSingle}}" role="dialog" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title"></h4>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to delete <strong>{{ ${{classSingle}}->name }}</strong>?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+    <!-- End Modal Delete -->
+
+@endsection
