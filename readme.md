@@ -1,3 +1,5 @@
+## Forked from [laralib/l5scaffold](https://github.com/laralib/l5scaffold) for my own needs!
+
 # Laravel 5 Scaffold Generator
 
 
